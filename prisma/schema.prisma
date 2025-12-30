@@ -1,0 +1,193 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+// ============ ENUMS ============
+
+enum Role {
+  ADMIN
+  RECRUITER
+  CLIENT
+}
+
+enum SeniorityLevel {
+  JUNIOR
+  MID_LEVEL
+  SENIOR
+  LEAD
+  ARCHITECT
+}
+
+enum EvaluationStatus {
+  PENDING
+  IN_QUEUE
+  EVALUATING
+  DONE
+  ERROR
+}
+
+enum JobStatus {
+  OPEN
+  CLOSED
+  ON_HOLD
+}
+
+enum EmploymentType {
+  FULL_TIME
+  PART_TIME
+  CONTRACT
+}
+
+// ============ USERS & AUTH ============
+
+model User {
+  id            String         @id @default(cuid())
+  email         String         @unique
+  passwordHash  String
+  firstName     String
+  lastName      String
+  role          Role
+  clientId      String?
+  client        Client?        @relation(fields: [clientId], references: [id])
+  refreshTokens RefreshToken[]
+  createdAt     DateTime       @default(now())
+  updatedAt     DateTime       @updatedAt
+
+  @@index([email])
+  @@index([role])
+}
+
+model RefreshToken {
+  id        String   @id @default(cuid())
+  token     String   @unique
+  userId    String
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  expiresAt DateTime
+  createdAt DateTime @default(now())
+
+  @@index([userId])
+  @@index([token])
+}
+
+// ============ CLIENTS ============
+
+model Client {
+  id                 String              @id @default(cuid())
+  name               String
+  companySize        String?
+  teamSize           String?
+  users              User[]
+  jobOpenings        JobOpening[]
+  candidates         Candidate[]
+  technicalQuestions TechnicalQuestion[]
+  createdAt          DateTime            @default(now())
+  updatedAt          DateTime            @updatedAt
+}
+
+// ============ CANDIDATES ============
+
+model Candidate {
+  id              String         @id @default(cuid())
+  name            String
+  email           String
+  role            String
+  seniorityLevel  SeniorityLevel
+  clientId        String
+  client          Client         @relation(fields: [clientId], references: [id])
+  mustHaveStack   String[]
+  niceToHaveStack String[]
+  evaluations     Evaluation[]
+  createdAt       DateTime       @default(now())
+  updatedAt       DateTime       @updatedAt
+
+  @@index([clientId])
+  @@index([email])
+}
+
+// ============ JOB OPENINGS ============
+
+model JobOpening {
+  id              String         @id @default(cuid())
+  title           String
+  description     String?
+  descriptionFile String?
+  clientId        String
+  client          Client         @relation(fields: [clientId], references: [id])
+  seniorityLevel  SeniorityLevel
+  requiredSkills  String[]
+  location        String
+  salaryMin       Float?
+  salaryMax       Float?
+  salaryPeriod    String?
+  employmentType  EmploymentType
+  status          JobStatus      @default(OPEN)
+  applicantsCount Int            @default(0)
+  createdAt       DateTime       @default(now())
+  updatedAt       DateTime       @updatedAt
+
+  @@index([clientId])
+  @@index([status])
+}
+
+// ============ EVALUATIONS ============
+
+model Evaluation {
+  id                 String           @id @default(cuid())
+  candidateId        String
+  candidate          Candidate        @relation(fields: [candidateId], references: [id])
+  technicalStatus    EvaluationStatus @default(PENDING)
+  culturalStatus     EvaluationStatus @default(PENDING)
+  technicalAudioFile String?
+  culturalAudioFile  String?
+  technicalResult    Json?
+  culturalResult     Json?
+  createdAt          DateTime         @default(now())
+  updatedAt          DateTime         @updatedAt
+
+  @@index([candidateId])
+  @@index([technicalStatus])
+  @@index([culturalStatus])
+}
+
+// ============ ASSESSMENTS ============
+
+model TechnicalQuestion {
+  id           String   @id @default(cuid())
+  title        String
+  questionType String
+  clientId     String?
+  client       Client?  @relation(fields: [clientId], references: [id])
+  jobPosition  String
+  primaryTech  String
+  techTags     String[]
+  questionFile String?
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+
+  @@index([clientId])
+  @@index([primaryTech])
+}
+
+model TechnicalProfile {
+  id        String   @id @default(cuid())
+  title     String   @unique
+  content   Json
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model TechnicalSkill {
+  id        String   @id @default(cuid())
+  title     String   @unique
+  content   Json
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
