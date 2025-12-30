@@ -57,11 +57,25 @@ model User {
   clientId      String?
   client        Client?        @relation(fields: [clientId], references: [id])
   refreshTokens RefreshToken[]
-  createdAt     DateTime       @default(now())
-  updatedAt     DateTime       @updatedAt
+
+  // Email verification
+  emailVerified            Boolean   @default(false)
+  emailVerificationToken   String?   @unique
+  emailVerificationExpires DateTime?
+
+  // Account lockout
+  failedLoginAttempts Int       @default(0)
+  lockoutUntil        DateTime?
+
+  // Terms acceptance
+  termsAcceptedAt DateTime?
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 
   @@index([email])
   @@index([role])
+  @@index([emailVerificationToken])
 }
 
 model RefreshToken {
@@ -74,6 +88,23 @@ model RefreshToken {
 
   @@index([userId])
   @@index([token])
+}
+
+model AuditLog {
+  id            String   @id @default(cuid())
+  action        String   // REGISTER, LOGIN_SUCCESS, LOGIN_FAILED, SIGNUP, VERIFY_EMAIL, etc.
+  email         String
+  userId        String?
+  ipAddress     String
+  userAgent     String?
+  success       Boolean
+  failureReason String?
+  metadata      Json?
+  createdAt     DateTime @default(now())
+
+  @@index([email])
+  @@index([action])
+  @@index([createdAt])
 }
 
 // ============ CLIENTS ============

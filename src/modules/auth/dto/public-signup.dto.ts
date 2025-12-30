@@ -1,14 +1,12 @@
 import {
+  IsBoolean,
   IsEmail,
-  IsEnum,
   IsNotEmpty,
-  IsOptional,
   IsString,
   Matches,
   MaxLength,
   MinLength,
 } from 'class-validator';
-import { Role } from '@prisma/client';
 
 // Password must contain at least:
 // - 8 characters minimum
@@ -22,7 +20,7 @@ const PASSWORD_REGEX =
 const PASSWORD_MESSAGE =
   'Password must be at least 8 characters and contain at least one uppercase letter, one lowercase letter, one number, and one special character (@$!%*?&)';
 
-export class RegisterDto {
+export class PublicSignupDto {
   @IsEmail({}, { message: 'Invalid email format' })
   @IsNotEmpty({ message: 'Email is required' })
   email: string;
@@ -46,11 +44,7 @@ export class RegisterDto {
   @MaxLength(100, { message: 'Last name must not exceed 100 characters' })
   lastName: string;
 
-  @IsEnum(Role, { message: 'Role must be ADMIN, RECRUITER, or CLIENT' })
-  @IsNotEmpty({ message: 'Role is required' })
-  role: Role;
-
-  @IsString()
-  @IsOptional()
-  clientId?: string;
+  @IsBoolean({ message: 'You must accept the terms of service' })
+  @IsNotEmpty({ message: 'You must accept the terms of service' })
+  acceptTerms: boolean;
 }
