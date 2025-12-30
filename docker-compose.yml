@@ -1,33 +1,14 @@
-version: '3.8'
-
 services:
-  api:
-    build:
-      context: .
-      dockerfile: Dockerfile
-    ports:
-      - "3001:3001"
-    environment:
-      - NODE_ENV=development
-      - PORT=3001
-      - DATABASE_URL=postgresql://postgres:postgres@db:5432/hr_platform?schema=public
-      - JWT_SECRET=dev-secret-key-change-in-production-min-32-chars
-      - JWT_REFRESH_SECRET=dev-refresh-secret-change-in-production-min-32-chars
-      - FRONTEND_URL=http://localhost:3000
-    depends_on:
-      db:
-        condition: service_healthy
-    networks:
-      - hr-platform
-
+  # PostgreSQL Database
   db:
     image: postgres:16-alpine
+    container_name: xseed-db
     ports:
       - "5432:5432"
     environment:
-      - POSTGRES_USER=postgres
-      - POSTGRES_PASSWORD=postgres
-      - POSTGRES_DB=hr_platform
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: hr_platform
     volumes:
       - postgres_data:/var/lib/postgresql/data
     healthcheck:
@@ -36,10 +17,59 @@ services:
       timeout: 5s
       retries: 5
     networks:
-      - hr-platform
+      - xseed-network
+
+  # NestJS API (production-like build)
+  api:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: xseed-api
+    ports:
+      - "3001:3001"
+    environment:
+      NODE_ENV: production
+      PORT: 3001
+      DATABASE_URL: postgresql://postgres:postgres@db:5432/hr_platform?schema=public
+      JWT_SECRET: dev-secret-key-change-in-production-min-32-chars
+      JWT_REFRESH_SECRET: dev-refresh-secret-change-in-production-min-32-chars
+      FRONTEND_URL: http://localhost:3000
+    depends_on:
+      db:
+        condition: service_healthy
+    networks:
+      - xseed-network
+    profiles:
+      - full  # Only runs with: docker-compose --profile full up
+
+  # NestJS API (development with hot reload)
+  api-dev:
+    image: node:20-alpine
+    container_name: xseed-api-dev
+    working_dir: /app
+    ports:
+      - "3001:3001"
+    volumes:
+      - .:/app
+      - /app/node_modules  # Exclude node_modules from mount
+    environment:
+      NODE_ENV: development
+      PORT: 3001
+      DATABASE_URL: postgresql://postgres:postgres@db:5432/hr_platform?schema=public
+      JWT_SECRET: dev-secret-key-change-in-production-min-32-chars
+      JWT_REFRESH_SECRET: dev-refresh-secret-change-in-production-min-32-chars
+      FRONTEND_URL: http://localhost:3000
+    command: sh -c "corepack enable && pnpm install && pnpm prisma generate && pnpm prisma migrate deploy && pnpm run start:dev"
+    depends_on:
+      db:
+        condition: service_healthy
+    networks:
+      - xseed-network
+    profiles:
+      - dev  # Only runs with: docker-compose --profile dev up
 
 networks:
-  hr-platform:
+  xseed-network:
     driver: bridge
 
 volumes:
