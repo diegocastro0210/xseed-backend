@@ -1,0 +1,6 @@
+- '@prisma/client'
+- '@prisma/engines'
+- 'prisma'
+- 'bcrypt'
+- '@nestjs/core'
+- 'unrs-resolver'

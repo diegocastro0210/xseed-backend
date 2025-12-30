@@ -114,8 +114,8 @@ export class AuthService {
         role: storedToken.user.role,
       },
       {
-        secret: this.configService.get<string>('jwt.secret'),
-        expiresIn: this.configService.get<string>('jwt.accessExpiresIn'),
+        secret: this.configService.get<string>('jwt.secret')!,
+        expiresIn: 900, // 15 minutes
       },
     );
 
@@ -162,8 +162,8 @@ export class AuthService {
     const payload = { sub: userId, email, role };
 
     const accessToken = this.jwtService.sign(payload, {
-      secret: this.configService.get<string>('jwt.secret'),
-      expiresIn: this.configService.get<string>('jwt.accessExpiresIn'),
+      secret: this.configService.get<string>('jwt.secret')!,
+      expiresIn: 900, // 15 minutes
     });
 
     const refreshToken = uuidv4();
