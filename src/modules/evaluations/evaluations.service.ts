@@ -113,7 +113,8 @@ export class EvaluationsService {
   // - Integration with speech-to-text APIs
   // - Scoring algorithms for technical & cultural fit
   async triggerEvaluation(id: string) {
-    const evaluation = await this.findOne(id);
+    // Verify evaluation exists (throws if not found)
+    await this.findOne(id);
 
     // For now, just update status to IN_QUEUE
     // In production, this would push to SQS

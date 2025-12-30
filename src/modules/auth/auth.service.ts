@@ -12,12 +12,7 @@ import { v4 as uuidv4 } from 'uuid';
 import { PrismaService } from '../../prisma/prisma.service';
 import { EmailService } from '../../common/services/email.service';
 import { AuditService } from '../../common/services/audit.service';
-import {
-  LoginDto,
-  RegisterDto,
-  RefreshTokenDto,
-  PublicSignupDto,
-} from './dto';
+import { LoginDto, RegisterDto, RefreshTokenDto, PublicSignupDto } from './dto';
 
 const MAX_FAILED_ATTEMPTS = 5;
 const LOCKOUT_DURATION_MINUTES = 15;
@@ -283,7 +278,11 @@ export class AuthService {
     };
   }
 
-  async login(loginDto: LoginDto, ipAddress: string = 'unknown', userAgent?: string) {
+  async login(
+    loginDto: LoginDto,
+    ipAddress: string = 'unknown',
+    userAgent?: string,
+  ) {
     const user = await this.prisma.user.findUnique({
       where: { email: loginDto.email },
     });
@@ -447,7 +446,11 @@ export class AuthService {
     return { accessToken };
   }
 
-  async logout(userId: string, ipAddress: string = 'unknown', userAgent?: string) {
+  async logout(
+    userId: string,
+    ipAddress: string = 'unknown',
+    userAgent?: string,
+  ) {
     const user = await this.prisma.user.findUnique({
       where: { id: userId },
       select: { email: true },

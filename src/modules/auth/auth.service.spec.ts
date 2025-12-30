@@ -131,7 +131,11 @@ describe('AuthService', () => {
       });
       (bcrypt.hash as jest.Mock).mockResolvedValue('hashed-password');
 
-      const result = await service.publicSignup(signupDto, '127.0.0.1', 'test-agent');
+      const result = await service.publicSignup(
+        signupDto,
+        '127.0.0.1',
+        'test-agent',
+      );
 
       expect(result.message).toContain('Account created successfully');
       expect(mockPrismaService.user.create).toHaveBeenCalledWith(
@@ -252,7 +256,9 @@ describe('AuthService', () => {
     it('should return success message even if user not found (prevent enumeration)', async () => {
       mockPrismaService.user.findUnique.mockResolvedValue(null);
 
-      const result = await service.resendVerificationEmail('nonexistent@example.com');
+      const result = await service.resendVerificationEmail(
+        'nonexistent@example.com',
+      );
 
       expect(result.message).toContain('If your email exists');
       expect(mockEmailService.sendVerificationEmail).not.toHaveBeenCalled();
@@ -497,7 +503,11 @@ describe('AuthService', () => {
       mockPrismaService.user.findUnique.mockResolvedValue(mockUser);
       mockPrismaService.refreshToken.deleteMany.mockResolvedValue({ count: 1 });
 
-      const result = await service.logout('user-123', '127.0.0.1', 'test-agent');
+      const result = await service.logout(
+        'user-123',
+        '127.0.0.1',
+        'test-agent',
+      );
 
       expect(result.message).toBe('Logged out successfully');
       expect(mockPrismaService.refreshToken.deleteMany).toHaveBeenCalledWith({

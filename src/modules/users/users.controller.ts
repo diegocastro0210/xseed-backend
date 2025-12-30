@@ -56,7 +56,10 @@ export class UsersController {
     },
   })
   @ApiResponse({ status: 401, description: 'Unauthorized' })
-  @ApiResponse({ status: 403, description: 'Forbidden - Admin access required' })
+  @ApiResponse({
+    status: 403,
+    description: 'Forbidden - Admin access required',
+  })
   @Get()
   @Roles(Role.ADMIN)
   async findAll(
@@ -92,7 +95,10 @@ export class UsersController {
     },
   })
   @ApiResponse({ status: 401, description: 'Unauthorized' })
-  @ApiResponse({ status: 403, description: 'Forbidden - Admin access required' })
+  @ApiResponse({
+    status: 403,
+    description: 'Forbidden - Admin access required',
+  })
   @ApiResponse({ status: 404, description: 'User not found' })
   @Get(':id')
   @Roles(Role.ADMIN)
@@ -120,14 +126,14 @@ export class UsersController {
     },
   })
   @ApiResponse({ status: 401, description: 'Unauthorized' })
-  @ApiResponse({ status: 403, description: 'Forbidden - Admin access required' })
+  @ApiResponse({
+    status: 403,
+    description: 'Forbidden - Admin access required',
+  })
   @ApiResponse({ status: 404, description: 'User not found' })
   @Patch(':id')
   @Roles(Role.ADMIN)
-  async update(
-    @Param('id') id: string,
-    @Body() updateData: UpdateUserDto,
-  ) {
+  async update(@Param('id') id: string, @Body() updateData: UpdateUserDto) {
     return this.usersService.update(id, updateData);
   }
 
@@ -138,7 +144,10 @@ export class UsersController {
   @ApiParam({ name: 'id', description: 'User ID', example: 'cluser123456' })
   @ApiResponse({ status: 200, description: 'User deleted successfully' })
   @ApiResponse({ status: 401, description: 'Unauthorized' })
-  @ApiResponse({ status: 403, description: 'Forbidden - Admin access required' })
+  @ApiResponse({
+    status: 403,
+    description: 'Forbidden - Admin access required',
+  })
   @ApiResponse({ status: 404, description: 'User not found' })
   @Delete(':id')
   @Roles(Role.ADMIN)

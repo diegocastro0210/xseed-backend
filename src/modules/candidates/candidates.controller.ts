@@ -30,7 +30,8 @@ export class CandidatesController {
 
   @ApiOperation({
     summary: 'Create candidate',
-    description: 'Create a new candidate in the talent pool. Admin and Recruiter access.',
+    description:
+      'Create a new candidate in the talent pool. Admin and Recruiter access.',
   })
   @ApiBody({ type: CreateCandidateDto })
   @ApiResponse({
@@ -52,7 +53,10 @@ export class CandidatesController {
   })
   @ApiResponse({ status: 400, description: 'Invalid input' })
   @ApiResponse({ status: 401, description: 'Unauthorized' })
-  @ApiResponse({ status: 403, description: 'Forbidden - Admin or Recruiter access required' })
+  @ApiResponse({
+    status: 403,
+    description: 'Forbidden - Admin or Recruiter access required',
+  })
   @Post()
   @Roles(Role.ADMIN, Role.RECRUITER)
   async create(@Body() createCandidateDto: CreateCandidateDto) {
@@ -61,14 +65,35 @@ export class CandidatesController {
 
   @ApiOperation({
     summary: 'List candidates',
-    description: 'Get paginated list of candidates with optional filters. Clients only see their own candidates.',
+    description:
+      'Get paginated list of candidates with optional filters. Clients only see their own candidates.',
   })
   @ApiQuery({ name: 'page', required: false, type: Number, example: 1 })
   @ApiQuery({ name: 'pageSize', required: false, type: Number, example: 10 })
-  @ApiQuery({ name: 'clientId', required: false, type: String, description: 'Filter by client ID' })
-  @ApiQuery({ name: 'role', required: false, type: String, description: 'Filter by job role' })
-  @ApiQuery({ name: 'seniorityLevel', required: false, enum: SeniorityLevel, description: 'Filter by seniority level' })
-  @ApiQuery({ name: 'search', required: false, type: String, description: 'Search by name or email' })
+  @ApiQuery({
+    name: 'clientId',
+    required: false,
+    type: String,
+    description: 'Filter by client ID',
+  })
+  @ApiQuery({
+    name: 'role',
+    required: false,
+    type: String,
+    description: 'Filter by job role',
+  })
+  @ApiQuery({
+    name: 'seniorityLevel',
+    required: false,
+    enum: SeniorityLevel,
+    description: 'Filter by seniority level',
+  })
+  @ApiQuery({
+    name: 'search',
+    required: false,
+    type: String,
+    description: 'Search by name or email',
+  })
   @ApiResponse({
     status: 200,
     description: 'Paginated list of candidates',
@@ -123,7 +148,11 @@ export class CandidatesController {
     summary: 'Get candidate by ID',
     description: 'Get a specific candidate by ID with full details.',
   })
-  @ApiParam({ name: 'id', description: 'Candidate ID', example: 'clcandidate123456' })
+  @ApiParam({
+    name: 'id',
+    description: 'Candidate ID',
+    example: 'clcandidate123456',
+  })
   @ApiResponse({
     status: 200,
     description: 'Candidate details',
@@ -155,7 +184,11 @@ export class CandidatesController {
     summary: 'Update candidate',
     description: 'Update candidate details. Admin and Recruiter access.',
   })
-  @ApiParam({ name: 'id', description: 'Candidate ID', example: 'clcandidate123456' })
+  @ApiParam({
+    name: 'id',
+    description: 'Candidate ID',
+    example: 'clcandidate123456',
+  })
   @ApiResponse({
     status: 200,
     description: 'Candidate updated successfully',
@@ -171,7 +204,10 @@ export class CandidatesController {
   })
   @ApiResponse({ status: 400, description: 'Invalid input' })
   @ApiResponse({ status: 401, description: 'Unauthorized' })
-  @ApiResponse({ status: 403, description: 'Forbidden - Admin or Recruiter access required' })
+  @ApiResponse({
+    status: 403,
+    description: 'Forbidden - Admin or Recruiter access required',
+  })
   @ApiResponse({ status: 404, description: 'Candidate not found' })
   @Patch(':id')
   @Roles(Role.ADMIN, Role.RECRUITER)
@@ -186,10 +222,17 @@ export class CandidatesController {
     summary: 'Delete candidate',
     description: 'Permanently delete a candidate. Admin only.',
   })
-  @ApiParam({ name: 'id', description: 'Candidate ID', example: 'clcandidate123456' })
+  @ApiParam({
+    name: 'id',
+    description: 'Candidate ID',
+    example: 'clcandidate123456',
+  })
   @ApiResponse({ status: 200, description: 'Candidate deleted successfully' })
   @ApiResponse({ status: 401, description: 'Unauthorized' })
-  @ApiResponse({ status: 403, description: 'Forbidden - Admin access required' })
+  @ApiResponse({
+    status: 403,
+    description: 'Forbidden - Admin access required',
+  })
   @ApiResponse({ status: 404, description: 'Candidate not found' })
   @Delete(':id')
   @Roles(Role.ADMIN)

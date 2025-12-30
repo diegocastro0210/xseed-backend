@@ -35,7 +35,9 @@ describe('AppController', () => {
     });
 
     it('should return unhealthy status when database is not connected', async () => {
-      mockPrismaService.$queryRaw.mockRejectedValue(new Error('Connection failed'));
+      mockPrismaService.$queryRaw.mockRejectedValue(
+        new Error('Connection failed'),
+      );
 
       const result = await appController.getHealth();
 
