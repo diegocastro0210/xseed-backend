@@ -62,7 +62,7 @@ NestJS backend API for the HR Platform with PostgreSQL, JWT authentication, and 
 | **ORM** | Prisma |
 | **Authentication** | JWT (Passport.js) |
 | **Validation** | class-validator |
-| **API Documentation** | (TODO) Swagger/OpenAPI |
+| **API Documentation** | Swagger/OpenAPI |
 | **Containerization** | Docker |
 | **Cloud** | AWS (ECS Fargate, RDS, S3, ALB) |
 | **IaC** | Terraform |
@@ -220,6 +220,8 @@ xseed-backend/
 ## API Endpoints
 
 Base URL: `http://localhost:3001/api`
+
+Swagger Documentation: `http://localhost:3001/docs`
 
 ### Authentication
 
@@ -538,13 +540,13 @@ jobs:
 ## Future TODOs
 
 - [ ] Complete remaining modules (assessments, technical-profiles, technical-skills, files)
-- [ ] Add Swagger/OpenAPI documentation
+- [x] Add Swagger/OpenAPI documentation
 - [ ] Implement S3 file uploads with pre-signed URLs
 - [ ] Add WebSocket support for real-time evaluation updates
 - [ ] Audio/file evaluation processing with SQS workers
 - [ ] Add comprehensive test coverage
 - [ ] Set up GitHub Actions CI/CD
-- [ ] Add health check endpoint
+- [x] Add health check endpoint
 
 ---
 
