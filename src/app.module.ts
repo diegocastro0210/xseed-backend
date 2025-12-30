@@ -8,6 +8,7 @@ import { PrismaModule } from './prisma/prisma.module';
 import { JwtAuthGuard, RolesGuard } from './common/guards';
 import { AllExceptionsFilter } from './common/filters';
 import { CustomValidationPipe } from './common/pipes/validation.pipe';
+import { CommonModule } from './common/common.module';
 
 import { AppController } from './app.controller';
 import { AuthModule } from './modules/auth/auth.module';
@@ -41,6 +42,7 @@ import { EvaluationsModule } from './modules/evaluations/evaluations.module';
       },
     ]),
     PrismaModule,
+    CommonModule,
     AuthModule,
     UsersModule,
     ClientsModule,
