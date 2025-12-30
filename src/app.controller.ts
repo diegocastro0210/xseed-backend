@@ -1,12 +1,33 @@
 import { Controller, Get } from '@nestjs/common';
-import { AppService } from './app.service';
+import { Public } from './common/decorators/public.decorator';
+import { PrismaService } from './prisma/prisma.service';
 
 @Controller()
 export class AppController {
-  constructor(private readonly appService: AppService) {}
+  constructor(private readonly prisma: PrismaService) {}
 
-  @Get()
-  getHello(): string {
-    return this.appService.getHello();
+  @Public()
+  @Get('health')
+  async getHealth() {
+    const checks = {
+      api: 'ok' as const,
+      database: 'ok' as 'ok' | 'error',
+    };
+
+    try {
+      await this.prisma.$queryRaw`SELECT 1`;
+    } catch {
+      checks.database = 'error';
+    }
+
+    const status = Object.values(checks).every((v) => v === 'ok')
+      ? 'healthy'
+      : 'unhealthy';
+
+    return {
+      status,
+      timestamp: new Date().toISOString(),
+      checks,
+    };
   }
 }
