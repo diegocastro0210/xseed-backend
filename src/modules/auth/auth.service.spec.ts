@@ -19,11 +19,11 @@ jest.mock('uuid', () => ({
 
 describe('AuthService', () => {
   let service: AuthService;
-  let prismaService: jest.Mocked<PrismaService>;
-  let jwtService: jest.Mocked<JwtService>;
-  let configService: jest.Mocked<ConfigService>;
-  let emailService: jest.Mocked<EmailService>;
-  let auditService: jest.Mocked<AuditService>;
+  let _prismaService: jest.Mocked<PrismaService>;
+  let _jwtService: jest.Mocked<JwtService>;
+  let _configService: jest.Mocked<ConfigService>;
+  let _emailService: jest.Mocked<EmailService>;
+  let _auditService: jest.Mocked<AuditService>;
 
   const mockUser = {
     id: 'user-123',
@@ -102,11 +102,11 @@ describe('AuthService', () => {
     }).compile();
 
     service = module.get<AuthService>(AuthService);
-    prismaService = module.get(PrismaService);
-    jwtService = module.get(JwtService);
-    configService = module.get(ConfigService);
-    emailService = module.get(EmailService);
-    auditService = module.get(AuditService);
+    _prismaService = module.get(PrismaService);
+    _jwtService = module.get(JwtService);
+    _configService = module.get(ConfigService);
+    _emailService = module.get(EmailService);
+    _auditService = module.get(AuditService);
   });
 
   it('should be defined', () => {
@@ -131,7 +131,11 @@ describe('AuthService', () => {
       });
       (bcrypt.hash as jest.Mock).mockResolvedValue('hashed-password');
 
-      const result = await service.publicSignup(signupDto, '127.0.0.1', 'test-agent');
+      const result = await service.publicSignup(
+        signupDto,
+        '127.0.0.1',
+        'test-agent',
+      );
 
       expect(result.message).toContain('Account created successfully');
       expect(mockPrismaService.user.create).toHaveBeenCalledWith(
@@ -252,7 +256,9 @@ describe('AuthService', () => {
     it('should return success message even if user not found (prevent enumeration)', async () => {
       mockPrismaService.user.findUnique.mockResolvedValue(null);
 
-      const result = await service.resendVerificationEmail('nonexistent@example.com');
+      const result = await service.resendVerificationEmail(
+        'nonexistent@example.com',
+      );
 
       expect(result.message).toContain('If your email exists');
       expect(mockEmailService.sendVerificationEmail).not.toHaveBeenCalled();
@@ -497,7 +503,11 @@ describe('AuthService', () => {
       mockPrismaService.user.findUnique.mockResolvedValue(mockUser);
       mockPrismaService.refreshToken.deleteMany.mockResolvedValue({ count: 1 });
 
-      const result = await service.logout('user-123', '127.0.0.1', 'test-agent');
+      const result = await service.logout(
+        'user-123',
+        '127.0.0.1',
+        'test-agent',
+      );
 
       expect(result.message).toBe('Logged out successfully');
       expect(mockPrismaService.refreshToken.deleteMany).toHaveBeenCalledWith({

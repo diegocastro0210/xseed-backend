@@ -26,8 +26,19 @@ export class CandidatesService {
     });
   }
 
-  async findAll(options: FindAllOptions, userRole: Role, userClientId?: string) {
-    const { page = 1, pageSize = 10, clientId, role, seniorityLevel, search } = options;
+  async findAll(
+    options: FindAllOptions,
+    userRole: Role,
+    userClientId?: string,
+  ) {
+    const {
+      page = 1,
+      pageSize = 10,
+      clientId,
+      role,
+      seniorityLevel,
+      search,
+    } = options;
     const skip = (page - 1) * pageSize;
 
     const where: Record<string, unknown> = {};

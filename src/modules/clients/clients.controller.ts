@@ -50,7 +50,10 @@ export class ClientsController {
   })
   @ApiResponse({ status: 400, description: 'Invalid input' })
   @ApiResponse({ status: 401, description: 'Unauthorized' })
-  @ApiResponse({ status: 403, description: 'Forbidden - Admin access required' })
+  @ApiResponse({
+    status: 403,
+    description: 'Forbidden - Admin access required',
+  })
   @Post()
   @Roles(Role.ADMIN)
   async create(@Body() createClientDto: CreateClientDto) {
@@ -59,7 +62,8 @@ export class ClientsController {
 
   @ApiOperation({
     summary: 'List all clients',
-    description: 'Get paginated list of all clients. Admin and Recruiter access.',
+    description:
+      'Get paginated list of all clients. Admin and Recruiter access.',
   })
   @ApiQuery({ name: 'page', required: false, type: Number, example: 1 })
   @ApiQuery({ name: 'pageSize', required: false, type: Number, example: 10 })
@@ -85,7 +89,10 @@ export class ClientsController {
     },
   })
   @ApiResponse({ status: 401, description: 'Unauthorized' })
-  @ApiResponse({ status: 403, description: 'Forbidden - Admin or Recruiter access required' })
+  @ApiResponse({
+    status: 403,
+    description: 'Forbidden - Admin or Recruiter access required',
+  })
   @Get()
   @Roles(Role.ADMIN, Role.RECRUITER)
   async findAll(
@@ -147,7 +154,10 @@ export class ClientsController {
   })
   @ApiResponse({ status: 400, description: 'Invalid input' })
   @ApiResponse({ status: 401, description: 'Unauthorized' })
-  @ApiResponse({ status: 403, description: 'Forbidden - Admin access required' })
+  @ApiResponse({
+    status: 403,
+    description: 'Forbidden - Admin access required',
+  })
   @ApiResponse({ status: 404, description: 'Client not found' })
   @Patch(':id')
   @Roles(Role.ADMIN)
@@ -165,7 +175,10 @@ export class ClientsController {
   @ApiParam({ name: 'id', description: 'Client ID', example: 'clclient123456' })
   @ApiResponse({ status: 200, description: 'Client deleted successfully' })
   @ApiResponse({ status: 401, description: 'Unauthorized' })
-  @ApiResponse({ status: 403, description: 'Forbidden - Admin access required' })
+  @ApiResponse({
+    status: 403,
+    description: 'Forbidden - Admin access required',
+  })
   @ApiResponse({ status: 404, description: 'Client not found' })
   @Delete(':id')
   @Roles(Role.ADMIN)

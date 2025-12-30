@@ -16,7 +16,7 @@ import {
   ApiParam,
   ApiBody,
 } from '@nestjs/swagger';
-import { Role, EvaluationStatus } from '@prisma/client';
+import { Role } from '@prisma/client';
 import { EvaluationsService } from './evaluations.service';
 import { CreateEvaluationDto } from './dto/create-evaluation.dto';
 import { UpdateEvaluationDto } from './dto/update-evaluation.dto';
@@ -31,7 +31,8 @@ export class EvaluationsController {
 
   @ApiOperation({
     summary: 'Create evaluation',
-    description: 'Start a new evaluation for a candidate. Admin and Recruiter access.',
+    description:
+      'Start a new evaluation for a candidate. Admin and Recruiter access.',
   })
   @ApiBody({ type: CreateEvaluationDto })
   @ApiResponse({
@@ -51,7 +52,10 @@ export class EvaluationsController {
   })
   @ApiResponse({ status: 400, description: 'Invalid input' })
   @ApiResponse({ status: 401, description: 'Unauthorized' })
-  @ApiResponse({ status: 403, description: 'Forbidden - Admin or Recruiter access required' })
+  @ApiResponse({
+    status: 403,
+    description: 'Forbidden - Admin or Recruiter access required',
+  })
   @ApiResponse({ status: 404, description: 'Candidate not found' })
   @Post()
   async create(@Body() createEvaluationDto: CreateEvaluationDto) {
@@ -60,7 +64,8 @@ export class EvaluationsController {
 
   @ApiOperation({
     summary: 'List evaluations',
-    description: 'Get paginated list of all evaluations. Admin and Recruiter access.',
+    description:
+      'Get paginated list of all evaluations. Admin and Recruiter access.',
   })
   @ApiQuery({ name: 'page', required: false, type: Number, example: 1 })
   @ApiQuery({ name: 'pageSize', required: false, type: Number, example: 10 })
@@ -87,7 +92,10 @@ export class EvaluationsController {
     },
   })
   @ApiResponse({ status: 401, description: 'Unauthorized' })
-  @ApiResponse({ status: 403, description: 'Forbidden - Admin or Recruiter access required' })
+  @ApiResponse({
+    status: 403,
+    description: 'Forbidden - Admin or Recruiter access required',
+  })
   @Get()
   async findAll(
     @Query('page') page?: string,
@@ -103,7 +111,11 @@ export class EvaluationsController {
     summary: 'Get evaluation by ID',
     description: 'Get a specific evaluation with full details.',
   })
-  @ApiParam({ name: 'id', description: 'Evaluation ID', example: 'cleval123456' })
+  @ApiParam({
+    name: 'id',
+    description: 'Evaluation ID',
+    example: 'cleval123456',
+  })
   @ApiResponse({
     status: 200,
     description: 'Evaluation details',
@@ -131,7 +143,10 @@ export class EvaluationsController {
     },
   })
   @ApiResponse({ status: 401, description: 'Unauthorized' })
-  @ApiResponse({ status: 403, description: 'Forbidden - Admin or Recruiter access required' })
+  @ApiResponse({
+    status: 403,
+    description: 'Forbidden - Admin or Recruiter access required',
+  })
   @ApiResponse({ status: 404, description: 'Evaluation not found' })
   @Get(':id')
   async findOne(@Param('id') id: string) {
@@ -142,7 +157,11 @@ export class EvaluationsController {
     summary: 'Update evaluation',
     description: 'Update evaluation status. Admin and Recruiter access.',
   })
-  @ApiParam({ name: 'id', description: 'Evaluation ID', example: 'cleval123456' })
+  @ApiParam({
+    name: 'id',
+    description: 'Evaluation ID',
+    example: 'cleval123456',
+  })
   @ApiBody({ type: UpdateEvaluationDto })
   @ApiResponse({
     status: 200,
@@ -158,7 +177,10 @@ export class EvaluationsController {
   })
   @ApiResponse({ status: 400, description: 'Invalid input' })
   @ApiResponse({ status: 401, description: 'Unauthorized' })
-  @ApiResponse({ status: 403, description: 'Forbidden - Admin or Recruiter access required' })
+  @ApiResponse({
+    status: 403,
+    description: 'Forbidden - Admin or Recruiter access required',
+  })
   @ApiResponse({ status: 404, description: 'Evaluation not found' })
   @Patch(':id')
   async update(
@@ -170,9 +192,14 @@ export class EvaluationsController {
 
   @ApiOperation({
     summary: 'Trigger evaluation processing',
-    description: 'Trigger AI processing for the evaluation. Admin and Recruiter access.',
+    description:
+      'Trigger AI processing for the evaluation. Admin and Recruiter access.',
   })
-  @ApiParam({ name: 'id', description: 'Evaluation ID', example: 'cleval123456' })
+  @ApiParam({
+    name: 'id',
+    description: 'Evaluation ID',
+    example: 'cleval123456',
+  })
   @ApiResponse({
     status: 201,
     description: 'Evaluation processing triggered',
@@ -184,7 +211,10 @@ export class EvaluationsController {
     },
   })
   @ApiResponse({ status: 401, description: 'Unauthorized' })
-  @ApiResponse({ status: 403, description: 'Forbidden - Admin or Recruiter access required' })
+  @ApiResponse({
+    status: 403,
+    description: 'Forbidden - Admin or Recruiter access required',
+  })
   @ApiResponse({ status: 404, description: 'Evaluation not found' })
   @Post(':id/trigger')
   async triggerEvaluation(@Param('id') id: string) {

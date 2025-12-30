@@ -36,7 +36,8 @@ export class AuthController {
 
   @ApiOperation({
     summary: 'Register new user (Admin only)',
-    description: 'Create a new user with any role. Requires admin authentication.',
+    description:
+      'Create a new user with any role. Requires admin authentication.',
   })
   @ApiBearerAuth('JWT-auth')
   @ApiBody({ type: RegisterDto })
@@ -59,8 +60,14 @@ export class AuthController {
       },
     },
   })
-  @ApiResponse({ status: 400, description: 'Invalid input or CLIENT role without clientId' })
-  @ApiResponse({ status: 401, description: 'Unauthorized - Admin access required' })
+  @ApiResponse({
+    status: 400,
+    description: 'Invalid input or CLIENT role without clientId',
+  })
+  @ApiResponse({
+    status: 401,
+    description: 'Unauthorized - Admin access required',
+  })
   @ApiResponse({ status: 409, description: 'Email already exists' })
   @Roles(Role.ADMIN)
   @Post('register')
@@ -71,12 +78,18 @@ export class AuthController {
     @Req() req: Request,
   ) {
     const userAgent = req.headers['user-agent'];
-    return this.authService.register(registerDto, adminId, ipAddress, userAgent);
+    return this.authService.register(
+      registerDto,
+      adminId,
+      ipAddress,
+      userAgent,
+    );
   }
 
   @ApiOperation({
     summary: 'Public signup',
-    description: 'Self-registration for CLIENT users. Requires email verification before login. Rate limited to 5 requests per minute.',
+    description:
+      'Self-registration for CLIENT users. Requires email verification before login. Rate limited to 5 requests per minute.',
   })
   @ApiBody({ type: PublicSignupDto })
   @ApiResponse({
@@ -84,11 +97,15 @@ export class AuthController {
     description: 'Account created, verification email sent',
     schema: {
       example: {
-        message: 'Account created successfully. Please check your email to verify your account.',
+        message:
+          'Account created successfully. Please check your email to verify your account.',
       },
     },
   })
-  @ApiResponse({ status: 400, description: 'Invalid input or terms not accepted' })
+  @ApiResponse({
+    status: 400,
+    description: 'Invalid input or terms not accepted',
+  })
   @ApiResponse({ status: 409, description: 'Email already exists' })
   @ApiResponse({ status: 429, description: 'Too many requests' })
   @Public()
@@ -105,7 +122,8 @@ export class AuthController {
 
   @ApiOperation({
     summary: 'Verify email',
-    description: 'Verify user email address using the token sent via email. Token expires in 24 hours.',
+    description:
+      'Verify user email address using the token sent via email. Token expires in 24 hours.',
   })
   @ApiBody({ type: VerifyEmailDto })
   @ApiResponse({
@@ -127,7 +145,8 @@ export class AuthController {
 
   @ApiOperation({
     summary: 'Resend verification email',
-    description: 'Resend email verification link. Rate limited to 3 requests per 5 minutes.',
+    description:
+      'Resend email verification link. Rate limited to 3 requests per 5 minutes.',
   })
   @ApiBody({ type: ResendVerificationDto })
   @ApiResponse({
@@ -150,7 +169,8 @@ export class AuthController {
 
   @ApiOperation({
     summary: 'Login',
-    description: 'Authenticate user and receive JWT tokens. Account locks after 5 failed attempts for 15 minutes.',
+    description:
+      'Authenticate user and receive JWT tokens. Account locks after 5 failed attempts for 15 minutes.',
   })
   @ApiBody({ type: LoginDto })
   @ApiResponse({
@@ -171,7 +191,10 @@ export class AuthController {
       },
     },
   })
-  @ApiResponse({ status: 401, description: 'Invalid credentials, account locked, or email not verified' })
+  @ApiResponse({
+    status: 401,
+    description: 'Invalid credentials, account locked, or email not verified',
+  })
   @Public()
   @Post('login')
   @HttpCode(HttpStatus.OK)

@@ -7,11 +7,7 @@ export class EmailService {
 
   constructor(private readonly configService: ConfigService) {}
 
-  async sendVerificationEmail(
-    email: string,
-    token: string,
-    firstName: string,
-  ): Promise<void> {
+  sendVerificationEmail(email: string, token: string, firstName: string): void {
     const frontendUrl = this.configService.get<string>('app.frontendUrl');
     const verificationUrl = `${frontendUrl}/verify-email?token=${token}`;
 
@@ -33,11 +29,11 @@ export class EmailService {
     );
   }
 
-  async sendPasswordResetEmail(
+  sendPasswordResetEmail(
     email: string,
     token: string,
     firstName: string,
-  ): Promise<void> {
+  ): void {
     const frontendUrl = this.configService.get<string>('app.frontendUrl');
     const resetUrl = `${frontendUrl}/reset-password?token=${token}`;
 

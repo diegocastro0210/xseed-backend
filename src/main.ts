@@ -30,7 +30,9 @@ async function bootstrap() {
   // Swagger documentation
   const config = new DocumentBuilder()
     .setTitle('XSeed API')
-    .setDescription('HR Platform API for user authentication, client management, candidate tracking, and evaluations')
+    .setDescription(
+      'HR Platform API for user authentication, client management, candidate tracking, and evaluations',
+    )
     .setVersion('1.0')
     .addBearerAuth(
       {
@@ -60,8 +62,13 @@ async function bootstrap() {
   const port = configService.get<number>('app.port') || 3001;
   await app.listen(port);
 
-  console.log(`🚀 Application is running on: http://localhost:${port}/${apiPrefix}`);
+  console.log(
+    `🚀 Application is running on: http://localhost:${port}/${apiPrefix}`,
+  );
   console.log(`📚 Swagger docs available at: http://localhost:${port}/docs`);
 }
 
-bootstrap();
+bootstrap().catch((error) => {
+  console.error('Failed to start application:', error);
+  process.exit(1);
+});

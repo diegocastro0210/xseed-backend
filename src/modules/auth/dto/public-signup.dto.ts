@@ -31,7 +31,8 @@ export class PublicSignupDto {
   email: string;
 
   @ApiProperty({
-    description: 'Password (min 8 chars, must include uppercase, lowercase, number, and special character)',
+    description:
+      'Password (min 8 chars, must include uppercase, lowercase, number, and special character)',
     example: 'SecurePass1!',
     minLength: 8,
     maxLength: 128,

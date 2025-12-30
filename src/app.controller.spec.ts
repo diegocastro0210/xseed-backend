@@ -4,7 +4,7 @@ import { PrismaService } from './prisma/prisma.service';
 
 describe('AppController', () => {
   let appController: AppController;
-  let prismaService: jest.Mocked<PrismaService>;
+  let _prismaService: jest.Mocked<PrismaService>;
 
   const mockPrismaService = {
     $queryRaw: jest.fn(),
@@ -19,7 +19,7 @@ describe('AppController', () => {
     }).compile();
 
     appController = app.get<AppController>(AppController);
-    prismaService = app.get(PrismaService);
+    _prismaService = app.get(PrismaService);
   });
 
   describe('health', () => {
@@ -35,7 +35,9 @@ describe('AppController', () => {
     });
 
     it('should return unhealthy status when database is not connected', async () => {
-      mockPrismaService.$queryRaw.mockRejectedValue(new Error('Connection failed'));
+      mockPrismaService.$queryRaw.mockRejectedValue(
+        new Error('Connection failed'),
+      );
 
       const result = await appController.getHealth();
 
