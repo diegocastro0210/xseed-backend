@@ -19,11 +19,11 @@ jest.mock('uuid', () => ({
 
 describe('AuthService', () => {
   let service: AuthService;
-  let prismaService: jest.Mocked<PrismaService>;
-  let jwtService: jest.Mocked<JwtService>;
-  let configService: jest.Mocked<ConfigService>;
-  let emailService: jest.Mocked<EmailService>;
-  let auditService: jest.Mocked<AuditService>;
+  let _prismaService: jest.Mocked<PrismaService>;
+  let _jwtService: jest.Mocked<JwtService>;
+  let _configService: jest.Mocked<ConfigService>;
+  let _emailService: jest.Mocked<EmailService>;
+  let _auditService: jest.Mocked<AuditService>;
 
   const mockUser = {
     id: 'user-123',
@@ -102,11 +102,11 @@ describe('AuthService', () => {
     }).compile();
 
     service = module.get<AuthService>(AuthService);
-    prismaService = module.get(PrismaService);
-    jwtService = module.get(JwtService);
-    configService = module.get(ConfigService);
-    emailService = module.get(EmailService);
-    auditService = module.get(AuditService);
+    _prismaService = module.get(PrismaService);
+    _jwtService = module.get(JwtService);
+    _configService = module.get(ConfigService);
+    _emailService = module.get(EmailService);
+    _auditService = module.get(AuditService);
   });
 
   it('should be defined', () => {

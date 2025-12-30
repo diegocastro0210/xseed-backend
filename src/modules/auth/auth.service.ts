@@ -170,7 +170,7 @@ export class AuthService {
     });
 
     // Send verification email
-    await this.emailService.sendVerificationEmail(
+    this.emailService.sendVerificationEmail(
       user.email,
       verificationToken,
       user.firstName,
@@ -259,7 +259,7 @@ export class AuthService {
       },
     });
 
-    await this.emailService.sendVerificationEmail(
+    this.emailService.sendVerificationEmail(
       user.email,
       verificationToken,
       user.firstName,

@@ -2,6 +2,22 @@
 
 This document provides context for Claude Code sessions working on this project.
 
+## Golden Rules
+
+**MANDATORY** - These rules must be followed in all sessions:
+
+1. **Never relax lint/test rules to make CI pass.** Fix the actual code issues instead of:
+   - Commenting out problematic code
+   - Disabling ESLint rules broadly
+   - Adding `@ts-ignore` or `eslint-disable` comments
+   - Making validation rules more permissive
+
+2. **Properly type all code.** Use TypeScript types and interfaces instead of `any`. Only exceptions:
+   - `@typescript-eslint/no-unsafe-assignment` in test files (Jest matchers return `any`)
+   - Underscore-prefixed variables for intentionally unused test setup
+
+3. **All lint errors must be fixed properly.** If CI fails, investigate and fix the root cause.
+
 ## Project Overview
 
 NestJS backend API for the HR Platform (XSeed). Provides REST API endpoints for user authentication, client management, candidate tracking, and evaluations.

@@ -9,7 +9,7 @@ jest.mock('uuid', () => ({
 
 describe('AuthController', () => {
   let controller: AuthController;
-  let authService: jest.Mocked<AuthService>;
+  let _authService: jest.Mocked<AuthService>;
 
   const mockAuthService = {
     register: jest.fn(),
@@ -26,7 +26,7 @@ describe('AuthController', () => {
     headers: {
       'user-agent': 'test-user-agent',
     },
-  } as any;
+  } as { headers: { 'user-agent': string } };
 
   beforeEach(async () => {
     jest.clearAllMocks();
@@ -37,7 +37,7 @@ describe('AuthController', () => {
     }).compile();
 
     controller = module.get<AuthController>(AuthController);
-    authService = module.get(AuthService);
+    _authService = module.get(AuthService);
   });
 
   it('should be defined', () => {
